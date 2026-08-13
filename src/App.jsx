@@ -9,7 +9,7 @@ function App() {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   
-  // New Interactive Modals & Menus States
+  // Interactive Modals & Menus States
   const [activeModal, setActiveModal] = useState(null); // 'music', 'dossier', 'tour', 'search', 'account'
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -52,8 +52,19 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans flex flex-col justify-between selection:bg-[#d4af37] selection:text-black relative">
+    <div className="min-h-screen text-white font-sans flex flex-col justify-between selection:bg-[#d4af37] selection:text-black relative bg-[#050505]">
       
+      {/* WORLD-CLASS FULLY ANIMATED DYNAMIC BACKGROUND CANVAS */}
+      <div className="fixed inset-0 w-screen h-screen pointer-events-none z-0 overflow-hidden flex items-center justify-center">
+        <img 
+          src={bgImage} 
+          alt="BartKush World-Class Animated Background" 
+          className="w-[130%] h-[130%] object-contain filter brightness-110 contrast-125 opacity-90"
+          style={{ animation: 'worldClassCinematicMotion 22s ease-in-out infinite alternate' }} 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/75"></div>
+      </div>
+
       {/* Top Elite Announcement Bar */}
       <div className="bg-gradient-to-r from-amber-700 via-[#d4af37] to-amber-700 text-black text-center text-[11px] font-black tracking-[0.25em] uppercase py-2.5 px-4 shadow-xl z-50">
         Worldwide Shipping Active • Official BartKush Music Co. Masterclass Drop
@@ -91,7 +102,7 @@ function App() {
         </nav>
 
         {/* Center Brand Logo (Clicks back to home top) */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 text-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <div className="absolute left-1/2 transform -translate-x-1/2 text-center cursor-pointer z-10" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <h1 className="text-base lg:text-xl font-black tracking-[0.3em] uppercase bg-gradient-to-r from-[#d4af37] via-amber-200 to-white bg-clip-text text-transparent">
             BartKush
           </h1>
@@ -140,26 +151,15 @@ function App() {
 
       </header>
 
-      <div>
+      <div className="relative z-10">
         {/* Full-Page Cinematic Hero Section */}
-        <section className="relative w-full h-[92vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden border-b border-white/10 bg-[#030303]">
+        <section className="relative w-full h-[92vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden border-b border-white/10 bg-transparent">
           
-          {/* Full Background Image Container with Vertical Rotation Animation */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden flex items-center justify-center">
-            <img 
-              src={bgImage} 
-              alt="BartKush Full Sharp Background Art" 
-              className="w-full h-full object-contain filter brightness-[0.95] contrast-125 transition-transform duration-1000"
-              style={{ animation: 'verticalFlipRotate 14s ease-in-out infinite' }} 
-            />
-            <div className="absolute inset-0 bg-black/30"></div>
-          </div>
-
-          {/* Central Profile Card with Transparent Background */}
-          <div className="relative z-10 flex flex-col items-center justify-center max-w-xl mx-auto px-8 py-12 bg-transparent backdrop-blur-sm rounded-3xl">
+          {/* COMPLETELY TRANSPARENT PROFILE & TEXT CARD */}
+          <div className="relative z-10 flex flex-col items-center justify-center max-w-xl mx-auto px-8 py-12 bg-transparent rounded-3xl">
             
             {/* Transparent Shield Profile Badge */}
-            <div className="relative mb-4 p-1.5 rounded-3xl border border-[#d4af37]/60 shadow-2xl bg-black/20 backdrop-blur-sm">
+            <div className="relative mb-4 p-1.5 rounded-3xl border border-[#d4af37]/60 shadow-2xl bg-black/20 backdrop-blur-xs">
               <div className="absolute -inset-2 bg-gradient-to-r from-[#d4af37] to-amber-700 rounded-3xl blur opacity-75"></div>
               <img 
                 src={profileImage} 
@@ -169,13 +169,13 @@ function App() {
               />
             </div>
 
-            <span className="text-[11px] uppercase tracking-[0.4em] text-[#d4af37] font-extrabold mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+            <span className="text-[11px] uppercase tracking-[0.4em] text-[#d4af37] font-extrabold mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
               The Echoes Of The West
             </span>
-            <h2 className="text-3xl md:text-5xl font-black tracking-wider mb-3 uppercase text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)]">
+            <h2 className="text-3xl md:text-5xl font-black tracking-wider mb-3 uppercase text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
               Robin Chand Thakuri
             </h2>
-            <p className="text-gray-100 text-xs md:text-sm max-w-md mb-8 font-medium tracking-wide leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+            <p className="text-gray-100 text-xs md:text-sm max-w-md mb-8 font-medium tracking-wide leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
               Official masterclass apparel collection, albums & exclusive headwear. Built for elite culture.
             </p>
             <button 
@@ -191,7 +191,7 @@ function App() {
         <main className="max-w-7xl mx-auto px-6 md:px-12 py-24 w-full">
           
           {/* Section Header & Category Filter Pills */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-6 mb-12 gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-6 mb-12 gap-6 bg-black/50 p-6 backdrop-blur-md rounded-xl">
             <div>
               <span className="text-[11px] text-[#d4af37] tracking-[0.25em] uppercase font-bold">Flagship Catalog</span>
               <h3 className="text-2xl md:text-4xl font-black tracking-wider uppercase mt-1">Explore Drops</h3>
@@ -206,7 +206,7 @@ function App() {
                   className={`text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 border transition-all ${
                     filteredCategory === cat 
                       ? 'bg-[#d4af37] text-black border-[#d4af37] shadow-lg' 
-                      : 'bg-black text-gray-400 border-white/10 hover:border-[#d4af37] hover:text-white'
+                      : 'bg-black/80 text-gray-300 border-white/10 hover:border-[#d4af37] hover:text-white'
                   }`}
                 >
                   {cat}
@@ -221,12 +221,12 @@ function App() {
               searchedProducts.map(p => (
                 <div 
                   key={p._id} 
-                  className="group relative bg-[#0b0b0b] border border-white/10 p-5 flex flex-col justify-between hover:border-[#d4af37] transition-all duration-500 hover:-translate-y-2 shadow-2xl"
+                  className="group relative bg-[#0b0b0b]/85 backdrop-blur-md border border-white/10 p-5 flex flex-col justify-between hover:border-[#d4af37] transition-all duration-500 hover:-translate-y-2 shadow-2xl"
                 >
                   <div>
                     {/* Image / Mockup Box */}
-                    <div className="w-full h-72 bg-[#040404] mb-5 flex items-center justify-center overflow-hidden border border-white/5 relative">
-                      <span className="text-xs text-gray-500 uppercase tracking-widest group-hover:text-[#d4af37] transition-colors">
+                    <div className="w-full h-72 bg-[#040404]/90 mb-5 flex items-center justify-center overflow-hidden border border-white/5 relative">
+                      <span className="text-xs text-gray-400 uppercase tracking-widest group-hover:text-[#d4af37] transition-colors">
                         [{p.category || 'BartKush Item'}]
                       </span>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
@@ -258,7 +258,7 @@ function App() {
                 </div>
               ))
             ) : (
-              <div className="col-span-full py-28 text-center text-gray-500 uppercase tracking-[0.2em] text-xs border border-dashed border-white/10 bg-[#070707]">
+              <div className="col-span-full py-28 text-center text-gray-300 uppercase tracking-[0.2em] text-xs border border-dashed border-white/10 bg-black/60 backdrop-blur-md">
                 No items found matching your criteria.
               </div>
             )}
@@ -271,7 +271,7 @@ function App() {
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onClick={() => setIsCartOpen(false)}></div>
           <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div className="w-screen max-w-md bg-[#0a0a0a] border-l border-white/10 p-6 flex flex-col justify-between shadow-2xl">
+            <div className="w-screen max-w-md bg-[#0a0a0a]/95 backdrop-blur-md border-l border-white/10 p-6 flex flex-col justify-between shadow-2xl z-50">
               <div>
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <h3 className="text-sm font-black tracking-[0.25em] uppercase text-[#d4af37]">Your Cart ({totalCartCount})</h3>
@@ -307,12 +307,12 @@ function App() {
         </div>
       )}
 
-      {/* Dynamic Popups / Modals for Nav Links (Dossier, Tour, Search, Account) */}
+      {/* Dynamic Popups / Modals */}
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={() => setActiveModal(null)}></div>
           
-          <div className="relative z-10 w-full max-w-lg bg-[#0b0b0b] border border-[#d4af37]/40 p-8 shadow-2xl rounded-2xl text-white">
+          <div className="relative z-10 w-full max-w-lg bg-[#0b0b0b]/95 backdrop-blur-md border border-[#d4af37]/40 p-8 shadow-2xl rounded-2xl text-white">
             <div className="flex justify-between items-center border-b border-white/10 pb-4 mb-6">
               <h3 className="text-xs font-black tracking-[0.3em] uppercase text-[#d4af37]">{activeModal} archive</h3>
               <button onClick={() => setActiveModal(null)} className="text-gray-400 hover:text-white font-bold">✕</button>
@@ -369,30 +369,33 @@ function App() {
       )}
 
       {/* Professional Masterclass Footer */}
-      <footer className="border-t border-white/10 bg-[#030303] py-16 px-8 text-center text-gray-500 text-xs tracking-widest uppercase">
-        <div className="flex flex-wrap justify-center gap-8 mb-8 text-gray-400 font-semibold text-xs">
+      <footer className="border-t border-white/10 bg-black/90 backdrop-blur-md py-16 px-8 text-center text-gray-400 text-xs tracking-widest uppercase relative z-10">
+        <div className="flex flex-wrap justify-center gap-8 mb-8 text-gray-300 font-semibold text-xs">
           <span className="hover:text-[#d4af37] cursor-pointer transition-colors">Help & Support</span>
           <span className="hover:text-[#d4af37] cursor-pointer transition-colors">Terms of Service</span>
           <span className="hover:text-[#d4af37] cursor-pointer transition-colors">Privacy Policy</span>
           <span className="hover:text-[#d4af37] cursor-pointer transition-colors">Cookie Choices</span>
         </div>
         <p className="mb-3 text-[#d4af37] font-bold tracking-widest">BartKush Music Co. © {new Date().getFullYear()} Official Masterclass Store</p>
-        <p className="text-[10px] text-gray-600 max-w-xl mx-auto mt-4 leading-normal">
+        <p className="text-[10px] text-gray-500 max-w-xl mx-auto mt-4 leading-normal">
           If you are using a screen reader and are having problems using this website, please call assistance at 866-682-4413.
         </p>
       </footer>
 
-      {/* Inline Keyframes for Upside-Down Vertical Rotation/Rocking Animation */}
+      {/* Inline Keyframes for World-Class Cinematic Motion Animation */}
       <style>{`
-        @keyframes verticalFlipRotate {
+        @keyframes worldClassCinematicMotion {
           0% {
-            transform: perspective(1000px) rotateX(0deg) scale(1);
+            transform: scale(1) translate(0%, 0%);
           }
-          50% {
-            transform: perspective(1000px) rotateX(180deg) scale(1.03);
+          33% {
+            transform: scale(1.06) translate(-2%, 2%);
+          }
+          66% {
+            transform: scale(1.04) translate(2%, -2%);
           }
           100% {
-            transform: perspective(1000px) rotateX(360deg) scale(1);
+            transform: scale(1.08) translate(-1%, -1%);
           }
         }
       `}</style>
