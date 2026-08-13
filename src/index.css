@@ -1,0 +1,50 @@
+@tailwind base;
+
+@keyframes fullPageFloatingArt {
+  0% {
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1);
+  }
+  25% {
+    transform: perspective(1200px) rotateX(1.5deg) rotateY(-2deg) scale(1.02);
+  }
+  50% {
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1.04);
+  }
+  75% {
+    transform: perspective(1200px) rotateX(-1.5deg) rotateY(2deg) scale(1.02);
+  }
+  100% {
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg) scale(1);
+  }
+}
+
+.masterclass-full-banner {
+  animation: fullPageFloatingArt 15s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+body {
+  margin: 0;
+  background-color: #050505;
+  color: #e5e5e5;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+@tailwind components;
+@tailwind utilities;
