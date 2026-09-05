@@ -174,24 +174,65 @@ function App() {
                   <div>
                     <div className="w-full h-72 bg-[#040404]/90 mb-5 flex items-center justify-center overflow-hidden border border-white/5 relative">
                       {p.image && p.image !== '' && !p.image.includes('placeholder') ? (
-                        <img src={p.image} alt={p.name} className="w-full h-full object-contain" onError={(e) => {
-                          e.target.style.display = 'none';
-                          const parent = e.target.parentElement;
-                          const span = document.createElement('span');
-                          span.className = 'text-xs text-gray-400 uppercase tracking-widest group-hover:text-[#d4af37] transition-colors';
-                          span.textContent = `[${p.category || 'BartKush Item'}]`;
-                          parent.appendChild(span);
-                        }} />
+                        <img 
+                          src={p.image} 
+                          alt={p.name} 
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            const parent = e.target.parentElement;
+                            const span = document.createElement('span');
+                            span.className = 'text-xs text-gray-400 uppercase tracking-widest group-hover:text-[#d4af37] transition-colors';
+                            span.textContent = `[${p.category || 'BartKush Item'}]`;
+                            parent.appendChild(span);
+                          }}
+                        />
                       ) : (
-                        <span className="text-xs text-gray-400 uppercase tracking-widest group-hover:text-[#d4af37] transition-colors">[{p.category || 'BartKush Item'}]</span>
+                        <span className="text-xs text-gray-400 uppercase tracking-widest group-hover:text-[#d4af37] transition-colors">
+                          [{p.category || 'BartKush Item'}]
+                        </span>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
                         <span className="w-full text-center text-xs font-bold text-black bg-[#d4af37] py-2.5 uppercase tracking-widest shadow-lg">{p.category === 'ALBUMS' ? 'Open Album Folder' : 'Quick View'}</span>
                       </div>
                     </div>
-                    <span className="text-[9px] text-[#d4af37] tracking-[0.2em] uppercase font-bold">{p.category || 'Limited Edition'}</span>
-                    <h4 className="font-bold text-sm text-gray-200 group-hover:text-[#d4af37] transition-colors tracking-wide mt-1">{p.name}</h4>
-                    <p className="text-gray-400 text-sm mt-2 font-medium">${p.price ? p.price.toFixed(2) : '0.00'}</p>
+                    
+                    {/* Product Metadata - UPDATED with all T-shirt details */}
+                    <span className="text-[9px] text-[#d4af37] tracking-[0.2em] uppercase font-bold">
+                      {p.category || 'Limited Edition'}
+                    </span>
+                    {/* LIMITED EDITION BADGE */}
+                    {p.isLimitedEdition && (
+                      <span className="inline-block ml-2 text-[8px] bg-[#d4af37] text-black font-black px-2 py-0.5 uppercase tracking-wider">
+                        Limited Edition
+                      </span>
+                    )}
+                    <h4 className="font-bold text-sm text-gray-200 group-hover:text-[#d4af37] transition-colors tracking-wide mt-1">
+                      {p.name}
+                    </h4>
+                    {/* COLOR DISPLAY */}
+                    {p.color && (
+                      <p className="text-[10px] text-gray-400 mt-1">Color: {p.color}</p>
+                    )}
+                    {/* DESCRIPTION */}
+                    {p.description && (
+                      <p className="text-[10px] text-gray-400 mt-1 leading-relaxed line-clamp-2 max-h-10 overflow-hidden">
+                        {p.description}
+                      </p>
+                    )}
+                    <p className="text-gray-400 text-sm mt-2 font-medium">
+                      Rs {p.price ? p.price.toFixed(2) : '0.00'}
+                    </p>
+                    {/* SIZE SELECTOR */}
+                    {p.sizes && p.sizes.length > 0 && (
+                      <div className="flex gap-1 mt-2 flex-wrap">
+                        {p.sizes.map((size) => (
+                          <span key={size} className="text-[8px] border border-white/20 px-2 py-0.5 rounded hover:border-[#d4af37] transition-colors cursor-pointer">
+                            {size}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <button onClick={(e) => handleAddToCart(p, e)} className="mt-6 w-full bg-transparent border border-white/20 text-white py-3.5 text-xs uppercase tracking-[0.2em] font-extrabold hover:bg-[#d4af37] hover:border-[#d4af37] hover:text-black transition-all duration-300">Add to Cart</button>
                 </div>
@@ -203,7 +244,7 @@ function App() {
         </main>
       </div>
 
-      {/* ALBUM MODAL - Updated with YouTube icons for each track */}
+      {/* ALBUM MODAL */}
       {selectedAlbum && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/85 backdrop-blur-md" onClick={() => setSelectedAlbum(null)}></div>
@@ -233,7 +274,7 @@ function App() {
                 <p className="text-sm font-black text-[#d4af37] mt-3">Price: ${selectedAlbum.price.toFixed(2)}</p>
               </div>
 
-              {/* Updated Tracklist with Music Player Style and YouTube Icons */}
+              {/* Tracklist */}
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="text-xs uppercase font-black tracking-[0.2em] text-[#d4af37]">Tracklist / Songs</h4>
@@ -250,18 +291,12 @@ function App() {
                     selectedAlbum.albumDetails.tracklist.map((track, index) => (
                       <div 
                         key={index} 
-                        className={`bg-[#141414] p-4 border border-white/5 hover:border-[#d4af37] transition-all duration-300 rounded-lg ${
-                          currentlyPlaying === index && isPlaying ? 'border-[#d4af37] bg-[#1a1a1a]' : ''
-                        }`}
+                        className={`bg-[#141414] p-4 border border-white/5 hover:border-[#d4af37] transition-all duration-300 rounded-lg ${currentlyPlaying === index && isPlaying ? 'border-[#d4af37] bg-[#1a1a1a]' : ''}`}
                       >
                         <div className="flex items-center gap-4">
                           <button 
                             onClick={() => togglePlay(index, track.audioFile)}
-                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
-                              currentlyPlaying === index && isPlaying 
-                                ? 'bg-[#d4af37] text-black' 
-                                : 'bg-[#d4af37] text-black hover:scale-110'
-                            }`}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 flex-shrink-0 ${currentlyPlaying === index && isPlaying ? 'bg-[#d4af37] text-black' : 'bg-[#d4af37] text-black hover:scale-110'}`}
                           >
                             {currentlyPlaying === index && isPlaying ? (
                               <span className="text-sm">⏸</span>
