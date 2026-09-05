@@ -167,8 +167,48 @@ function App() {
             </div>
           </div>
           
+          {/* Dynamic Product Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {searchedProducts.length > 0 ? (
+            {filteredCategory === 'JEWELRIES' ? (
+              // ✅ COMING SOON BANNER FOR JEWELRIES
+              <div className="col-span-full py-16 text-center">
+                <div className="max-w-2xl mx-auto bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-[#d4af37]/30 rounded-2xl p-12 shadow-2xl relative overflow-hidden">
+                  {/* Decorative gold lines */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+                  
+                  {/* Gold ring decoration */}
+                  <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full border border-[#d4af37]/10"></div>
+                  <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full border border-[#d4af37]/10"></div>
+                  
+                  <div className="relative z-10">
+                    {/* Icon */}
+                    <div className="text-6xl mb-6">💎</div>
+                    
+                    <h3 className="text-3xl md:text-4xl font-black tracking-wider uppercase text-[#d4af37]">
+                      Coming Soon
+                    </h3>
+                    
+                    <div className="w-24 h-0.5 bg-[#d4af37] mx-auto my-4"></div>
+                    
+                    <p className="text-gray-400 text-sm md:text-base tracking-widest uppercase max-w-md mx-auto">
+                      Premium Jewelry Collection
+                    </p>
+                    
+                    <p className="text-gray-500 text-xs mt-3 tracking-wide max-w-sm mx-auto">
+                      Elite masterclass jewelry pieces are being curated for the discerning connoisseur.
+                    </p>
+                    
+                    {/* Decorative dots */}
+                    <div className="flex justify-center gap-2 mt-6">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/50"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/30"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/10"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : searchedProducts.length > 0 ? (
               searchedProducts.map(p => (
                 <div key={p._id} onClick={() => { if (p.category === 'ALBUMS') setSelectedAlbum(p); }} className="group relative bg-[#0b0b0b]/85 backdrop-blur-md border border-white/10 p-5 flex flex-col justify-between hover:border-[#d4af37] transition-all duration-500 hover:-translate-y-2 shadow-2xl cursor-pointer">
                   <div>
@@ -197,24 +237,23 @@ function App() {
                       </div>
                     </div>
                     
-                    {/* Product Metadata - UPDATED with all T-shirt details */}
-                    <span className="text-[9px] text-[#d4af37] tracking-[0.2em] uppercase font-bold">
-                      {p.category || 'Limited Edition'}
-                    </span>
-                    {/* LIMITED EDITION BADGE */}
-                    {p.isLimitedEdition && (
-                      <span className="inline-block ml-2 text-[8px] bg-[#d4af37] text-black font-black px-2 py-0.5 uppercase tracking-wider">
-                        Limited Edition
+                    {/* Product Metadata */}
+                    <div className="flex items-center flex-wrap gap-1">
+                      <span className="text-[9px] text-[#d4af37] tracking-[0.2em] uppercase font-bold">
+                        {p.category || 'Limited Edition'}
                       </span>
-                    )}
+                      {p.isLimitedEdition && (
+                        <span className="inline-block text-[8px] bg-[#d4af37] text-black font-black px-2 py-0.5 uppercase tracking-wider">
+                          Limited Edition
+                        </span>
+                      )}
+                    </div>
                     <h4 className="font-bold text-sm text-gray-200 group-hover:text-[#d4af37] transition-colors tracking-wide mt-1">
                       {p.name}
                     </h4>
-                    {/* COLOR DISPLAY */}
                     {p.color && (
                       <p className="text-[10px] text-gray-400 mt-1">Color: {p.color}</p>
                     )}
-                    {/* DESCRIPTION */}
                     {p.description && (
                       <p className="text-[10px] text-gray-400 mt-1 leading-relaxed line-clamp-2 max-h-10 overflow-hidden">
                         {p.description}
@@ -223,7 +262,6 @@ function App() {
                     <p className="text-gray-400 text-sm mt-2 font-medium">
                       Rs {p.price ? p.price.toFixed(2) : '0.00'}
                     </p>
-                    {/* SIZE SELECTOR */}
                     {p.sizes && p.sizes.length > 0 && (
                       <div className="flex gap-1 mt-2 flex-wrap">
                         {p.sizes.map((size) => (
@@ -311,7 +349,6 @@ function App() {
                               {track.artist && (
                                 <span className="text-xs text-gray-400">{track.artist}</span>
                               )}
-                              {/* YouTube Link Icon */}
                               {track.youtubeLink && (
                                 <a 
                                   href={track.youtubeLink} 
@@ -398,7 +435,7 @@ function App() {
                       <div key={item._id} className="flex items-center justify-between bg-[#111111] p-4 border border-white/5">
                         <div>
                           <h4 className="text-xs font-bold text-white">{item.name}</h4>
-                          <p className="text-[11px] text-[#d4af37] mt-1">${item.price.toFixed(2)} × {item.quantity}</p>
+                          <p className="text-[11px] text-[#d4af37] mt-1">Rs {item.price.toFixed(2)} × {item.quantity}</p>
                         </div>
                         <button onClick={() => handleRemoveFromCart(item._id)} className="text-gray-500 hover:text-red-400 text-xs uppercase tracking-wider font-bold">Remove</button>
                       </div>
@@ -411,7 +448,7 @@ function App() {
               <div className="border-t border-white/10 pt-6">
                 <div className="flex justify-between items-center mb-6 text-sm font-bold tracking-widest uppercase">
                   <span>Subtotal:</span>
-                  <span className="text-[#d4af37]">${totalPrice.toFixed(2)}</span>
+                  <span className="text-[#d4af37]">Rs {totalPrice.toFixed(2)}</span>
                 </div>
                 <button onClick={() => alert('Proceeding to secure checkout...')} className="w-full bg-[#d4af37] text-black font-black py-4 uppercase tracking-[0.25em] text-xs hover:bg-white transition-all shadow-xl">Proceed to Checkout</button>
               </div>
