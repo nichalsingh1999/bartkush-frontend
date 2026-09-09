@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import bgImage from './assets/background.jpeg';
 import profileImage from './assets/profile.jpeg';
+import echoesImage from './assets/Echoes.jpeg'; // <--- ADDED IMPORT
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -13,6 +14,9 @@ function App() {
   const [activeModal, setActiveModal] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+  
+  // Image Modal State
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   
   // Audio Player States
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
@@ -81,6 +85,55 @@ function App() {
     }
   };
 
+  // CHECKOUT FUNCTION
+  const handleCheckout = async () => {
+    if (cartItems.length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
+
+    const customerName = prompt('Enter your full name:');
+    if (!customerName) return;
+
+    const customerPhone = prompt('Enter your WhatsApp number (with country code, e.g., 977XXXXXXXXXX):');
+    if (!customerPhone) return;
+
+    const shippingAddress = prompt('Enter your shipping address:');
+    if (!shippingAddress) return;
+
+    const customerEmail = prompt('Enter your email (optional):');
+
+    const orderData = {
+      items: cartItems.map(item => ({
+        productId: item._id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image || ''
+      })),
+      totalAmount: totalPrice,
+      customerName,
+      customerEmail: customerEmail || '',
+      customerPhone,
+      shippingAddress,
+      paymentMethod: 'Cash on Delivery'
+    };
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/orders', orderData);
+      
+      if (response.data.success) {
+        alert(`✅ Order placed successfully!\n\nOrder ID: ${response.data.order.orderId}\n\n📧 Email notification sent to the owner!\n\nThe owner will contact you shortly.`);
+        
+        setCartItems([]);
+        setIsCartOpen(false);
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('❌ Failed to place order. Please try again.');
+    }
+  };
+
   const categories = ['ALL', 'ALBUMS', 'T-SHIRTS', 'CAPS', 'JEWELRIES'];
   const displayedProducts = filteredCategory === 'ALL' 
     ? products 
@@ -137,12 +190,20 @@ function App() {
       </header>
 
       <div className="relative z-10">
-        {/* Hero Section */}
+        {/* Hero Section - WITH CLICKABLE PROFILE IMAGE */}
         <section className="relative w-full h-[92vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden border-b border-white/10 bg-transparent">
           <div className="relative z-10 flex flex-col items-center justify-center max-w-xl mx-auto px-8 py-12 bg-transparent rounded-3xl">
-            <div className="relative mb-4 p-1.5 rounded-3xl border border-[#d4af37]/60 shadow-2xl bg-black/20 backdrop-blur-xs">
+            {/* Profile Image - Clickable */}
+            <div 
+              className="relative mb-4 p-1.5 rounded-3xl border border-[#d4af37]/60 shadow-2xl bg-black/20 backdrop-blur-xs cursor-pointer hover:scale-105 transition-transform duration-300" 
+              onClick={() => setIsImageModalOpen(true)}
+            >
               <div className="absolute -inset-2 bg-gradient-to-r from-[#d4af37] to-amber-700 rounded-3xl blur opacity-75"></div>
-              <img src={profileImage} alt="Robin Chand Thakuri Shield Logo" className="relative w-28 h-28 md:w-36 md:h-36 object-cover rounded-2xl shadow-inner mix-blend-screen opacity-95" style={{ filter: 'contrast(1.15) brightness(1.05)' }} />
+              <img 
+                src={profileImage} 
+                alt="Robin Chand Thakuri Shield Logo" 
+                className="relative w-28 h-28 md:w-36 md:h-36 object-cover rounded-2xl"
+              />
             </div>
             <span className="text-[11px] uppercase tracking-[0.4em] text-[#d4af37] font-extrabold mb-2 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">The Echoes Of The West</span>
             <h2 className="text-3xl md:text-5xl font-black tracking-wider mb-3 uppercase text-white drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">Robin Chand Thakuri</h2>
@@ -150,6 +211,37 @@ function App() {
             <button onClick={() => window.scrollTo({ top: 850, behavior: 'smooth' })} className="bg-[#d4af37] text-black font-black px-10 py-4 uppercase tracking-[0.25em] text-[11px] hover:bg-white hover:scale-105 transition-all duration-300 shadow-2xl rounded-none">Explore Collection</button>
           </div>
         </section>
+
+        {/* Image Modal - Full Screen Popup */}
+        {isImageModalOpen && (
+          <div 
+            className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg"
+            onClick={() => setIsImageModalOpen(false)}
+          >
+            <div 
+              className="relative max-w-3xl w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button 
+                onClick={() => setIsImageModalOpen(false)}
+                className="absolute -top-12 right-0 text-white hover:text-[#d4af37] text-3xl font-bold transition-colors z-10"
+              >
+                ✕
+              </button>
+              
+              {/* Image */}
+              <img 
+                src={profileImage} 
+                alt="Robin Chand Thakuri Shield Logo" 
+                className="w-full h-auto rounded-2xl shadow-2xl border-2 border-[#d4af37]/60"
+              />
+              
+              {/* Decorative gold line */}
+              <div className="mt-4 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
+            </div>
+          </div>
+        )}
 
         {/* Products Section */}
         <main className="max-w-7xl mx-auto px-6 md:px-12 py-24 w-full">
@@ -170,36 +262,18 @@ function App() {
           {/* Dynamic Product Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {filteredCategory === 'JEWELRIES' ? (
-              // ✅ COMING SOON BANNER FOR JEWELRIES
               <div className="col-span-full py-16 text-center">
                 <div className="max-w-2xl mx-auto bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-[#d4af37]/30 rounded-2xl p-12 shadow-2xl relative overflow-hidden">
-                  {/* Decorative gold lines */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
-                  
-                  {/* Gold ring decoration */}
                   <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full border border-[#d4af37]/10"></div>
                   <div className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full border border-[#d4af37]/10"></div>
-                  
                   <div className="relative z-10">
-                    {/* Icon */}
                     <div className="text-6xl mb-6">💎</div>
-                    
-                    <h3 className="text-3xl md:text-4xl font-black tracking-wider uppercase text-[#d4af37]">
-                      Coming Soon
-                    </h3>
-                    
+                    <h3 className="text-3xl md:text-4xl font-black tracking-wider uppercase text-[#d4af37]">Coming Soon</h3>
                     <div className="w-24 h-0.5 bg-[#d4af37] mx-auto my-4"></div>
-                    
-                    <p className="text-gray-400 text-sm md:text-base tracking-widest uppercase max-w-md mx-auto">
-                      Premium Jewelry Collection
-                    </p>
-                    
-                    <p className="text-gray-500 text-xs mt-3 tracking-wide max-w-sm mx-auto">
-                      Elite masterclass jewelry pieces are being curated for the discerning connoisseur.
-                    </p>
-                    
-                    {/* Decorative dots */}
+                    <p className="text-gray-400 text-sm md:text-base tracking-widest uppercase max-w-md mx-auto">Premium Jewelry Collection</p>
+                    <p className="text-gray-500 text-xs mt-3 tracking-wide max-w-sm mx-auto">Elite masterclass jewelry pieces are being curated for the discerning connoisseur.</p>
                     <div className="flex justify-center gap-2 mt-6">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/50"></span>
                       <span className="w-1.5 h-1.5 rounded-full bg-[#d4af37]/30"></span>
@@ -213,6 +287,8 @@ function App() {
                 <div key={p._id} onClick={() => { if (p.category === 'ALBUMS') setSelectedAlbum(p); }} className="group relative bg-[#0b0b0b]/85 backdrop-blur-md border border-white/10 p-5 flex flex-col justify-between hover:border-[#d4af37] transition-all duration-500 hover:-translate-y-2 shadow-2xl cursor-pointer">
                   <div>
                     <div className="w-full h-72 bg-[#040404]/90 mb-5 flex items-center justify-center overflow-hidden border border-white/5 relative">
+                      
+                      {/* UPDATED IMAGE LOGIC BELOW */}
                       {p.image && p.image !== '' && !p.image.includes('placeholder') ? (
                         <img 
                           src={p.image} 
@@ -227,17 +303,25 @@ function App() {
                             parent.appendChild(span);
                           }}
                         />
+                      ) : p.name.toLowerCase().includes('echoes') || p.name.toLowerCase().includes('west') ? (
+                        // Fallback to local asset for "The Echoes Of The West"
+                        <img 
+                          src={echoesImage} 
+                          alt={p.name} 
+                          className="w-full h-full object-contain"
+                        />
                       ) : (
                         <span className="text-xs text-gray-400 uppercase tracking-widest group-hover:text-[#d4af37] transition-colors">
                           [{p.category || 'BartKush Item'}]
                         </span>
                       )}
+                      {/* END UPDATED IMAGE LOGIC */}
+
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
                         <span className="w-full text-center text-xs font-bold text-black bg-[#d4af37] py-2.5 uppercase tracking-widest shadow-lg">{p.category === 'ALBUMS' ? 'Open Album Folder' : 'Quick View'}</span>
                       </div>
                     </div>
                     
-                    {/* Product Metadata */}
                     <div className="flex items-center flex-wrap gap-1">
                       <span className="text-[9px] text-[#d4af37] tracking-[0.2em] uppercase font-bold">
                         {p.category || 'Limited Edition'}
@@ -312,7 +396,6 @@ function App() {
                 <p className="text-sm font-black text-[#d4af37] mt-3">Price: ${selectedAlbum.price.toFixed(2)}</p>
               </div>
 
-              {/* Tracklist */}
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="text-xs uppercase font-black tracking-[0.2em] text-[#d4af37]">Tracklist / Songs</h4>
@@ -392,7 +475,6 @@ function App() {
                 </div>
               </div>
 
-              {/* YouTube Link */}
               <div>
                 <h4 className="text-xs uppercase font-black tracking-[0.2em] text-[#d4af37] mb-3">Official Stream / YouTube Preview</h4>
                 <a href={selectedAlbum.albumDetails?.youtubeLink || "https://www.youtube.com/watch?v=Ri3JuT-MquA"} target="_blank" rel="noopener noreferrer" className="block w-full h-48 bg-black border border-white/10 overflow-hidden relative group hover:border-[#d4af37] transition-all duration-300">
@@ -450,7 +532,12 @@ function App() {
                   <span>Subtotal:</span>
                   <span className="text-[#d4af37]">Rs {totalPrice.toFixed(2)}</span>
                 </div>
-                <button onClick={() => alert('Proceeding to secure checkout...')} className="w-full bg-[#d4af37] text-black font-black py-4 uppercase tracking-[0.25em] text-xs hover:bg-white transition-all shadow-xl">Proceed to Checkout</button>
+                <button 
+                  onClick={handleCheckout} 
+                  className="w-full bg-[#d4af37] text-black font-black py-4 uppercase tracking-[0.25em] text-xs hover:bg-white transition-all shadow-xl"
+                >
+                  Proceed to Checkout
+                </button>
               </div>
             </div>
           </div>
