@@ -547,7 +547,7 @@ function App() {
                 Robin Chand Thakuri
               </h1>
               <p className="text-[11px] uppercase tracking-[0.4em] text-gray-400 font-bold">
-                Musician • Producer • Songwriter
+                Musician • Producer • Singer and song writer 
               </p>
             </div>
 
@@ -601,8 +601,8 @@ function App() {
               <div className="space-y-4">
                 {[
                   { year: "2021", title: "The Beginning", desc: "Robin Chand Thakuri begins his musical journey — writing, recording, and building his sound." },
-                  { year: "2024", title: "Multiple Genre Disorder, Vol.1", desc: "Debut studio project released. A multi-genre statement that refuses to fit one box." },
-                  { year: "2025", title: "The Echoes Of The West", desc: "Upcoming masterclass album. A cinematic exploration of western sound and culture." }
+                  { year: "2023", title: "Multiple Genre Disorder, Vol.1", desc: "Debut studio project released. A multi-genre statement that refuses to fit one box." },
+                  { year: "2027", title: "The Echoes Of The West", desc: "Upcoming masterclass album. A cinematic exploration of western sound and culture." }
                 ].map((item, index) => (
                   <div key={index} className="flex gap-6 bg-[#0b0b0b]/80 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:border-[#d4af37] transition-all duration-300">
                     <div className="flex-shrink-0">
