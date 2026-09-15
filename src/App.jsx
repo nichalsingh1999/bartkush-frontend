@@ -15,6 +15,9 @@ import blackCapImage from './assets/Blackcap.jpeg';
 import blueCapImage from './assets/bluecap.jpeg';
 import whiteCapImage from './assets/whitecap.jpeg';
 
+// ✅ Production Backend URL
+const API_URL = 'https://bartkush-backend.onrender.com';
+
 function App() {
   const [products, setProducts] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState('ALL');
@@ -55,7 +58,8 @@ function App() {
   ];
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
+    // ✅ UPDATED: Uses API_URL constant
+    axios.get(`${API_URL}/api/products`)
       .then(res => setProducts(res.data))
       .catch(err => console.log('Backend connection error:', err));
   }, []);
@@ -85,7 +89,8 @@ function App() {
     if (!customerEmail) return;
 
     try {
-      await axios.post('http://localhost:5000/api/pre-save', {
+      // ✅ UPDATED: Uses API_URL constant
+      await axios.post(`${API_URL}/api/pre-save`, {
         albumId: album._id,
         albumName: album.name,
         customerEmail: customerEmail,
@@ -170,7 +175,8 @@ function App() {
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/orders', orderData);
+      // ✅ UPDATED: Uses API_URL constant
+      const response = await axios.post(`${API_URL}/api/orders`, orderData);
       
       if (response.data.success) {
         alert(`✅ Order placed successfully!\n\nOrder ID: ${response.data.order.orderId}\n\n📧 Email notification sent to the owner!\n\nThe owner will contact you shortly.`);
@@ -516,17 +522,15 @@ function App() {
         </div>
       )}
 
-      {/* ✅ ABOUT / DOSSIER PAGE (Music-Focused) */}
+      {/* ✅ ABOUT / DOSSIER PAGE */}
       {activeModal === 'dossier' && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-[#050505]">
           
-          {/* Cinematic Background */}
           <div className="fixed inset-0 z-0">
             <img src={bgImage} alt="Background" className="w-full h-full object-cover opacity-25 blur-sm" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/95 to-black"></div>
           </div>
 
-          {/* Close Button */}
           <button 
             onClick={() => setActiveModal(null)} 
             className="fixed top-6 right-6 z-50 w-12 h-12 rounded-full bg-black/70 border border-[#d4af37]/50 text-[#d4af37] hover:bg-[#d4af37] hover:text-black transition-all duration-300 flex items-center justify-center text-xl font-bold"
@@ -536,7 +540,6 @@ function App() {
 
           <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 py-20">
 
-            {/* HERO TITLE */}
             <div className="text-center mb-16">
               <div className="flex items-center justify-center gap-3 mb-5">
                 <span className="w-12 h-px bg-[#d4af37]"></span>
@@ -551,7 +554,6 @@ function App() {
               </p>
             </div>
 
-            {/* PROFILE PHOTO + MUSIC INTRO */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16 items-center">
               <div className="md:col-span-1 flex justify-center">
                 <div className="relative p-1.5 rounded-3xl border border-[#d4af37]/60 bg-black/40 shadow-2xl">
@@ -577,7 +579,6 @@ function App() {
               </div>
             </div>
 
-            {/* STATS BAR - MUSIC FOCUSED */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
               {[
                 { value: "2021", label: "Since" },
@@ -592,7 +593,6 @@ function App() {
               ))}
             </div>
 
-            {/* MUSICAL MILESTONES */}
             <div className="mb-16">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-1 h-6 bg-[#d4af37]"></div>
@@ -617,7 +617,6 @@ function App() {
               </div>
             </div>
 
-            {/* SIGNATURE QUOTE - MUSIC FOCUSED */}
             <div className="bg-gradient-to-br from-[#0f0f0f] to-[#0a0a0a] border border-[#d4af37]/30 rounded-2xl p-10 text-center mb-16 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent"></div>
               <div className="text-4xl text-[#d4af37] mb-4">"</div>
@@ -627,14 +626,12 @@ function App() {
               <p className="text-[10px] uppercase tracking-[0.4em] text-[#d4af37] font-black">— Robin Chand Thakuri</p>
             </div>
 
-            {/* ✅ CONTACT SECTION */}
             <div className="mb-16">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-1 h-6 bg-[#d4af37]"></div>
                 <h3 className="text-xs uppercase font-black tracking-[0.3em] text-[#d4af37]">Bookings & Contact</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Email Card */}
                 <a 
                   href={`mailto:${contactInfo.email}`}
                   className="flex items-center gap-5 bg-gradient-to-br from-[#0f0f0f] to-[#0a0a0a] border border-[#d4af37]/30 rounded-xl p-6 hover:border-[#d4af37] transition-all duration-300 group"
@@ -648,7 +645,6 @@ function App() {
                   </div>
                 </a>
 
-                {/* Phone Card */}
                 <a 
                   href={`tel:${contactInfo.phone}`}
                   className="flex items-center gap-5 bg-gradient-to-br from-[#0f0f0f] to-[#0a0a0a] border border-[#d4af37]/30 rounded-xl p-6 hover:border-[#d4af37] transition-all duration-300 group"
@@ -664,7 +660,6 @@ function App() {
               </div>
             </div>
 
-            {/* SOCIAL LINKS */}
             <div className="text-center">
               <div className="flex items-center justify-center gap-3 mb-6">
                 <span className="w-12 h-px bg-[#d4af37]"></span>
@@ -687,7 +682,6 @@ function App() {
               </div>
             </div>
 
-            {/* FOOTER SIGNATURE */}
             <div className="text-center mt-20">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <span className="w-16 h-px bg-[#d4af37]/50"></span>
